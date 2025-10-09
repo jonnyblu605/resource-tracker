@@ -9,6 +9,8 @@ tools:
   read: true
   list: true
   grep: true
+  todoread: true
+  todowrite: true
   write: false
   edit: false
   patch: false
