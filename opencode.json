@@ -74,5 +74,12 @@
         "input_newline": "shift+enter,ctrl+j"
       }
     }
+  },
+  "mcp": {
+    "gcloud": {
+      "type": "local",
+      "command": ["npx", "-y", "@google-cloud/gcloud-mcp"],
+      "enabled": true
+    }
   }
 }

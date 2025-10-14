@@ -20,6 +20,8 @@ permission:
     "bq *": allow
     "bash *": allow
     "*": allow
+mcp:
+  gcloud: true
   edit: deny
   webfetch: deny
 metadata:
