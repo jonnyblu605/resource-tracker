@@ -1,0 +1,189 @@
+{
+  "summary": {
+    "total": 2,
+    "countsByType": {
+      "External HTTP(S) load balancers": 2
+    },
+    "serverlessCount": 1
+  },
+  "loadBalancers": [
+    {
+      "name": "gwar-staging-serverless-lb-target-proxy",
+      "projectId": "gwar-staging",
+      "type": "External HTTP(S) load balancers",
+      "scope": "global",
+      "region": null,
+      "scheme": "EXTERNAL",
+      "ipAddresses": [
+        "35.186.215.27"
+      ],
+      "ports": [
+        "80-80"
+      ],
+      "protocols": [
+        "TCP"
+      ],
+      "forwardingRules": [
+        "global/gwar-staging-frontend-neg"
+      ],
+      "targetProxy": {
+        "name": "gwar-staging-serverless-lb-target-proxy",
+        "type": "targetHttpProxies",
+        "scope": "global",
+        "region": null
+      },
+      "urlMap": "gwar-staging-serverless-lb",
+      "backendServices": [
+        "gwar-staging-backend-service"
+      ],
+      "backendTypes": [
+        "ServerlessNEG(AppEngine)"
+      ],
+      "backendCount": 1,
+      "healthChecks": [],
+      "network": [],
+      "subnetworks": [],
+      "labels": {},
+      "creationTimestamp": "2021-06-01T17:02:18.090-07:00",
+      "selfLink": "https://www.googleapis.com/compute/v1/projects/gwar-staging/global/targetHttpProxies/gwar-staging-serverless-lb-target-proxy",
+      "id": "3896614000223024233",
+      "protocolNotes": [
+        "http"
+      ],
+      "serverlessBackends": [
+        "AppEngine"
+      ]
+    },
+    {
+      "name": "looker-https-proxy",
+      "projectId": "prj-looker-ext-prod",
+      "type": "External HTTP(S) load balancers",
+      "scope": "regional",
+      "region": "us-central1",
+      "scheme": "EXTERNAL_MANAGED",
+      "ipAddresses": [
+        "34.67.52.101"
+      ],
+      "ports": [
+        "443-443"
+      ],
+      "protocols": [
+        "TCP"
+      ],
+      "forwardingRules": [
+        "us-central1/looker-https-forwarding-rule"
+      ],
+      "targetProxy": {
+        "name": "looker-https-proxy",
+        "type": "targetHttpsProxies",
+        "scope": "regional",
+        "region": "us-central1"
+      },
+      "urlMap": "looker-url-map",
+      "backendServices": [
+        "looker-backend-service"
+      ],
+      "backendTypes": [
+        "PSC"
+      ],
+      "backendCount": 1,
+      "healthChecks": [],
+      "network": [
+        "https://www.googleapis.com/compute/v1/projects/prj-platform-shared-vpc/global/networks/platform-vpc"
+      ],
+      "subnetworks": [],
+      "labels": {},
+      "creationTimestamp": "2025-09-25T12:47:39.272-07:00",
+      "selfLink": "https://www.googleapis.com/compute/v1/projects/prj-looker-ext-prod/regions/us-central1/targetHttpsProxies/looker-https-proxy",
+      "id": "8767755831777700861",
+      "protocolNotes": [
+        "https"
+      ],
+      "serverlessBackends": []
+    }
+  ],
+  "warnings": [
+    "ancient-blade-475018-d7: compute.googleapis.com disabled",
+    "annular-accord-473715-k7: compute.googleapis.com disabled",
+    "appb-471615: compute.googleapis.com disabled",
+    "aws-cognito-228319: compute.googleapis.com disabled",
+    "balmy-tokenizer-467316-s5: compute.googleapis.com disabled",
+    "clever-bounty-287419: compute.googleapis.com disabled",
+    "cognito-idp-285617: compute.googleapis.com disabled",
+    "compact-system-463619-i6: compute.googleapis.com disabled",
+    "crested-dialect-471914-j1: compute.googleapis.com disabled",
+    "crypto-lore-305815: compute.googleapis.com disabled",
+    "cws-deployment-tool: compute.googleapis.com disabled",
+    "data-licensing: compute.googleapis.com disabled",
+    "decent-craft-467319-q1: compute.googleapis.com disabled",
+    "decisive-talon-301117: compute.googleapis.com disabled",
+    "disco-light-467319-n6: compute.googleapis.com disabled",
+    "drydock-app: compute.googleapis.com disabled",
+    "dwcrypto-202222: compute.googleapis.com disabled",
+    "dwecrypter: compute.googleapis.com disabled",
+    "ehr-gateway-demo: compute.googleapis.com disabled",
+    "ehr-gateway-dev: compute.googleapis.com disabled",
+    "ehr-gateway-prod: compute.googleapis.com disabled",
+    "ehr-gateway-staging: compute.googleapis.com disabled",
+    "elite-frame-467319-h8: compute.googleapis.com disabled",
+    "fast-incentive-464717-a7: compute.googleapis.com disabled",
+    "fleet-muse-419421: compute.googleapis.com disabled",
+    "fluent-potion-471818-b9: compute.googleapis.com disabled",
+    "gam-project-1cj-xyt-uey: compute.googleapis.com disabled",
+    "gam-project-xze-cyf-a6f: compute.googleapis.com disabled",
+    "gen-lang-client-0169209172: compute.googleapis.com disabled",
+    "gen-lang-client-0724512314: compute.googleapis.com disabled",
+    "gpayjwt-dev: compute.googleapis.com disabled",
+    "graceful-karma-434715-c4: compute.googleapis.com disabled",
+    "gwar-staging-west: compute.googleapis.com disabled",
+    "hale-badge-436919-k0: compute.googleapis.com disabled",
+    "hello-world-425608: compute.googleapis.com disabled",
+    "instant-node-469513-h6: compute.googleapis.com disabled",
+    "ipex-staging: compute.googleapis.com disabled",
+    "lateral-guild-470917-e1: compute.googleapis.com disabled",
+    "lateral-name-471119-u2: compute.googleapis.com disabled",
+    "master-inn-166618: compute.googleapis.com disabled",
+    "modern-sublime-247614: compute.googleapis.com disabled",
+    "my-project-1547966783309: compute.googleapis.com disabled",
+    "natural-reserve-467318-q9: compute.googleapis.com disabled",
+    "neural-truth-191716: compute.googleapis.com disabled",
+    "newagent-ahqo: compute.googleapis.com disabled",
+    "nmiq-passthrough: compute.googleapis.com disabled",
+    "nmiq-prod: compute.googleapis.com disabled",
+    "nmiq-tripped: compute.googleapis.com disabled",
+    "optimus-oauth: compute.googleapis.com disabled",
+    "orbital-anchor-469618-f7: compute.googleapis.com disabled",
+    "patient-catchment-map: compute.googleapis.com disabled",
+    "patientapp-translation: compute.googleapis.com disabled",
+    "patientappsignin: compute.googleapis.com disabled",
+    "patientco-1519855437646: compute.googleapis.com disabled",
+    "patientco-ldap-sync: compute.googleapis.com disabled",
+    "patientco: compute.googleapis.com disabled",
+    "perimeter81vpn-238813: compute.googleapis.com disabled",
+    "pfc-ai-hackweek-1: compute.googleapis.com disabled",
+    "pfc-feedback: compute.googleapis.com disabled",
+    "platinum-logic-469516-g2: compute.googleapis.com disabled",
+    "prior-auth-policy-documents: compute.googleapis.com disabled",
+    "prj-clearanceaipoc-dev: compute.googleapis.com disabled",
+    "prj-elig-prs-mapping-dev: compute.googleapis.com disabled",
+    "prj-engmetrics-dv: compute.googleapis.com disabled",
+    "prj-remits-recoupement-dv: compute.googleapis.com disabled",
+    "quickstart-1563826256400: compute.googleapis.com disabled",
+    "sapient-flare-451519-d3: compute.googleapis.com disabled",
+    "sinuous-bedrock-469516-n3: compute.googleapis.com disabled",
+    "smart-tangent-469617-a2: compute.googleapis.com disabled",
+    "smooth-transit-239114: compute.googleapis.com disabled",
+    "t-slate-287017: compute.googleapis.com disabled",
+    "the-slate-461414-a2: compute.googleapis.com disabled",
+    "tinker-demo-434514: compute.googleapis.com disabled",
+    "tinker-demo: compute.googleapis.com disabled",
+    "tinker-dev-471717: compute.googleapis.com disabled",
+    "tinker-pci-dev: compute.googleapis.com disabled",
+    "trnslte-x-lang-f-1556550322270: compute.googleapis.com disabled",
+    "universeanalysispoc: compute.googleapis.com disabled",
+    "vue-conversion-rag: compute.googleapis.com disabled",
+    "waystar-pfc-epp-relay-tmp: compute.googleapis.com disabled"
+  ],
+  "projectCount": 122,
+  "projectsProcessed": 42
+}

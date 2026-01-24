@@ -8,8 +8,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import defaultdict
 from typing import List, Dict, Any, Optional, Tuple, Set
 
-ORG_ID = "655586926911"
-MAX_WORKERS = 10
+DEFAULT_ORG_ID = "655586926911"
+ORG_ID = os.environ.get("GCP_ORG_ID", DEFAULT_ORG_ID) or DEFAULT_ORG_ID
+PROJECT_FILTER = os.environ.get("GCP_PROJECT_FILTER")
+MAX_WORKERS = int(os.environ.get("GCP_LB_MAX_WORKERS", "10"))
 FORWARDING_RULE_SCHEMES = {"EXTERNAL", "EXTERNAL_MANAGED", "INTERNAL", "INTERNAL_MANAGED"}
 GCLOUD_ENV = {**os.environ, "CLOUDSDK_CORE_DISABLE_PROMPTS": "1"}
 
@@ -159,12 +161,23 @@ def summarize_error(project_id: str, err: str) -> str:
     return f"{project_id}: unknown error"
 
 
+def build_project_filter() -> str:
+    base_filter = []
+    if ORG_ID:
+        base_filter.append(f"parent.type:organization AND parent.id={ORG_ID}")
+    if PROJECT_FILTER:
+        base_filter.append(f"({PROJECT_FILTER})")
+    base_filter.append("lifecycleState=ACTIVE")
+    return " AND ".join(base_filter)
+
+
 def load_projects() -> List[Dict[str, Any]]:
+    filter_expr = build_project_filter()
     cmd = [
         "gcloud",
         "projects",
         "list",
-        f"--filter=parent.type:organization AND parent.id={ORG_ID} AND lifecycleState=ACTIVE",
+        f"--filter={filter_expr}",
         "--format=json",
         "--quiet",
     ]

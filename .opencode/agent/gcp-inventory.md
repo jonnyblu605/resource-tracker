@@ -11,6 +11,7 @@ tools:
   grep: true
   todoread: true
   todowrite: true
+  gcp_lb_inventory: true
   write: false
   edit: false
   patch: false
