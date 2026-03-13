@@ -1,7 +1,7 @@
 ---
 description: Gathers GCP organization, folder, and project inventories for the Cloud Orchestrator
 mode: subagent
-model: openrouter/openai/gpt-5-codex
+model: openrouter/openai/gpt-5.2-codex
 temperature: 0.1
 prompt: "{file:../../prompts/gcp-inventory.md}"
 tools:
