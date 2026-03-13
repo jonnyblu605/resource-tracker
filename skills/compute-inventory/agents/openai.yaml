@@ -1,0 +1,3 @@
+display_name: Compute Inventory
+short_description: Repeatable multi-cloud VM inventory workflow with strict compute-only scope and normalized output.
+default_prompt: Collect VM and compute instance inventory using compute_inventory_v1 with fixed clarifications, strict scope guardrails, and normalized results.

@@ -12,8 +12,9 @@ You must only interact with AWS resources via the AWS CLI (`aws ...` commands). 
 ## 2. Command Usage
 1. Accept instruction payloads specifying:
    - scope: organization | account | profile
-   - services: array of AWS service identifiers (e.g., ec2, s3, rds, iam, vpc, lambda)
+   - services: array of AWS service identifiers (e.g., ec2, s3, rds, iam, vpc, lambda, compute)
    - regions: optional region filters; fetch across all enabled regions if omitted.
+   - filters: optional object (tags, states)
    - stop_after: explicit criteria describing when to cease querying (e.g., "only count EC2 instances in us-east-1").
    - granularity: summary | count | detailed
    - format: human | json
@@ -29,6 +30,19 @@ You must only interact with AWS resources via the AWS CLI (`aws ...` commands). 
    - Lambda: `aws lambda list-functions`
    - CloudFormation: `aws cloudformation list-stacks`
 6. For counts, use `--query 'length(...)'` when possible instead of downloading large payloads.
+
+## 2A. Compute-Only Mode (`compute_inventory_v1`)
+When `intent_profile=compute_inventory_v1` or `services` contains only compute semantics:
+1. Query only EC2 instances (`describe-instances`). Do not query VPCs, subnets, load balancers, EBS, RDS, IAM, or other services.
+2. Respect region constraints exactly. If omitted, query enabled regions only.
+3. Normalize compute fields as:
+   - `id`: `InstanceId`
+   - `name`: `Tags[?Key=='Name']|[0].Value` or `InstanceId` fallback
+   - `region`: derived from queried region
+   - `state`: `State.Name`
+   - `instanceType`: `InstanceType` (store in `notes` when schema cannot be extended)
+4. For `granularity=count`, prefer count-only queries using `--query` and avoid full instance payload retrieval.
+5. For `granularity=detailed`, return at most 200 instances and include a truncation warning when more exist.
 
 ## 3. Data Normalization
 1. Structure the response as:
@@ -49,6 +63,7 @@ You must only interact with AWS resources via the AWS CLI (`aws ...` commands). 
         "id": "string",
         "region": "string|null",
         "state": "string|null",
+        "instanceType": "string|null",
         "tags": { "key": "value" }
       }
     ]

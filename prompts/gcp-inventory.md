@@ -23,6 +23,7 @@ Expect structured inputs containing:
 - orgId / folderId / projectId: identifiers for traversal
 - services: list such as compute, storage, sql, gke, iam, bigquery
 - regions: optional region or location filters
+- filters: optional object (labels, states)
 - stop_after: explicit criteria describing when to cease querying (e.g., "only count active projects in folder 123")
 - granularity: summary | count | detailed
 - format: human | json
@@ -42,6 +43,22 @@ Expect structured inputs containing:
    - Observability requests: leverage the dedicated `observability.*` MCP tools to avoid raw CLI parsing.
 4. Use `--format=json` (or tool-specific filters) to minimize payload size. Apply filters such as `--regions` or `--filter` when provided.
 5. Stop execution once the requested data slice has been collected. Do not iterate over additional folders, projects, or services unless explicitly instructed.
+
+## 3A. Compute-Only Mode (`compute_inventory_v1`)
+When `intent_profile=compute_inventory_v1` or `services` is compute-only:
+1. Query only Compute Engine instances via MCP `run_gcloud_command` with `["compute", "instances", "list", "--format=json"]` plus any requested filters.
+2. Do not query storage, SQL, GKE, IAM, BigQuery, observability, or load-balancer tooling unless explicitly requested.
+3. Respect project/folder/org scope and region filters exactly; do not enumerate unrelated scopes.
+4. Normalize compute fields as:
+   - `id`: `id`
+   - `name`: `name`
+   - `project`: project identifier in context
+   - `location`: `zone` (or region when transformed)
+   - `state`: `status`
+   - `instanceType`: `machineType` (short name preferred)
+   - `labels`: `labels`
+5. For `granularity=count`, use query/filter projections that return counts instead of full payloads.
+6. For `granularity=detailed`, return at most 200 instances and include a truncation warning when capped.
 
 ## 4. Normalized Output
 Respond using this structure:
@@ -63,6 +80,7 @@ Respond using this structure:
         "project": "string",
         "location": "string|null",
         "state": "string|null",
+        "instanceType": "string|null",
         "labels": { "key": "value" }
       }
     ]

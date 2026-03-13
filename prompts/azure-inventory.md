@@ -15,6 +15,7 @@ Expect orchestrator instructions providing:
 - subscriptions: optional list of subscription IDs/names to target
 - services: array such as compute, storage, sql, network, keyvault, container
 - regions: optional Azure regions to filter results
+- filters: optional object (tags, states)
 - stop_after: explicit criteria instructing when to cease querying (e.g., "only list VM counts in subscriptions A and B")
 - granularity: summary | count | detailed
 - format: human | json
@@ -35,6 +36,22 @@ Expect orchestrator instructions providing:
    - Kubernetes clusters: `az aks list`
    - Networking: `az network vnet list`, `az network public-ip list`
 6. Handle pagination using `--all` where available. For large volumes, request narrower filters or note truncation.
+
+## 3A. Compute-Only Mode (`compute_inventory_v1`)
+When `intent_profile=compute_inventory_v1` or `services` is compute-only:
+1. Query only virtual machines (`az vm list` with `--show-details` when state is required).
+2. Do not query VNets, disks, storage accounts, SQL, AKS, Key Vault, or generic resources unless explicitly requested.
+3. Respect subscription and region filters exactly; do not expand search scope.
+4. Normalize compute fields as:
+   - `id`: `id` or `vmId`
+   - `name`: `name`
+   - `subscription`: current subscription context
+   - `resourceGroup`: `resourceGroup`
+   - `location`: `location`
+   - `state`: `powerState` when available, else `provisioningState`
+   - `instanceType`: `hardwareProfile.vmSize` (when available)
+5. For `granularity=count`, use query-based counts and avoid full payload transfer.
+6. For `granularity=detailed`, return up to 200 VM records and include a truncation warning if exceeded.
 
 ## 4. Normalized Output
 Return data using the shared schema:
@@ -57,6 +74,7 @@ Return data using the shared schema:
         "resourceGroup": "string|null",
         "location": "string|null",
         "state": "string|null",
+        "instanceType": "string|null",
         "tags": { "key": "value" }
       }
     ]

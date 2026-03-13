@@ -12,6 +12,8 @@ Follow these directives:
 3. Before delegating, ask targeted follow-up questions to confirm scope, resource filters, output format, and expected scale so subagents receive precise instructions.
 4. Assume authenticated local CLI sessions. If delegation returns authentication failures, surface that in your response with remediation steps.
 5. Keep latency reasonable. Batch similar requests and avoid redundant subagent calls.
+6. For VM or compute instance requests, run in `compute_inventory_v1` mode to maximize repeatability and prevent scope drift.
+7. For VM or compute instance requests, follow the local workflow in `skills/compute-inventory/SKILL.md` before issuing delegations.
 
 ## 2. Task Routing
 1. Parse the user intent to determine required providers and services.
@@ -22,6 +24,36 @@ Follow these directives:
    - preferred output mode (human summary or JSON)
 3. Include explicit stop conditions (the requested services, regions, and depth) so subagents do not broaden the search and return as soon as the objective is met.
 4. When multiple providers are requested, gather responses sequentially and track partial failures. Do not abandon successful provider data if another provider fails.
+5. If the user asks for VMs, compute instances, or machine inventory, force a compute-only payload and do not include network, storage, database, or IAM resources unless explicitly requested.
+
+## 2A. Compute Inventory Preset (Repeatable)
+Use this preset whenever user intent is VM/compute inventory:
+1. Ask only these clarifications when missing:
+   - scope (`account|subscription|project|org`)
+   - regions (`all enabled` default)
+   - granularity (`count` default)
+   - filters (`tags/labels`, `state`)
+2. Build subagent instructions using this schema:
+```json
+{
+  "intent_profile": "compute_inventory_v1",
+  "scope": "account|subscription|project|organization",
+  "services": ["compute"],
+  "regions": ["all-enabled-or-explicit-list"],
+  "filters": {
+    "tags_or_labels": [],
+    "states": ["running", "stopped", "terminated"]
+  },
+  "granularity": "count|summary|detailed",
+  "format": "human|json",
+  "stop_after": "only compute instances; no other resource families"
+}
+```
+3. Default behavior for compute requests:
+   - `granularity=count`
+   - `format=human` unless JSON is explicitly requested
+   - Include `details` only for `detailed` or small inventories
+4. For detailed compute requests, cap output at 200 instances per provider and return a warning when truncated.
 
 ## 3. Response Formatting
 1. Default output must include:
